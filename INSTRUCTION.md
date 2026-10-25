@@ -1,4 +1,4 @@
-﻿# Running Todolist with Docker Compose
+# Running Todolist with Docker Compose
 
 ## Prerequisites
 
@@ -24,7 +24,7 @@ Validate the Compose configuration:
 docker compose config --quiet
 ```
 
-Build both images and start the services in the background:
+Build the application image, download the official MySQL image if needed, and start the services in the background:
 
 ```sh
 docker compose up --build -d
@@ -32,8 +32,10 @@ docker compose up --build -d
 
 The services are:
 
-- `mysql`: MySQL database `app_db`, accessible to the application at `mysql:3306`.
+- `mysql`: official `mysql:8.0` image providing database `app_db`, accessible to the application at `mysql:3306`.
 - `todolistapp`: Django application, accessible at http://localhost:8080/.
+
+Compose passes `DB_HOST=mysql`, `DB_NAME=app_db`, `DB_USER=app_user`, and `DB_PASSWORD=1234` to Django. Django reads these environment variables in `todolist/settings.py`.
 
 The application entrypoint runs database migrations before starting the server. The first build and MySQL initialization can take some time.
 
